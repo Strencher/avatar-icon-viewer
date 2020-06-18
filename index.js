@@ -18,9 +18,8 @@ const GuildChannelUserContextMenu = getModule(m => m.default && m.default.displa
 const ModalStack = getModule(["push", "popAll"], false);
 const copy = e=>getModule(["copy"], false).copy(e);
 module.exports = class AvatarViewer extends Plugin {
-    get id() {return "avatar-viewer"}
     startPlugin() {
-        if(GuildChannelUserContextMenu) inject(this.id, GuildChannelUserContextMenu, "default", (args, ret) => {
+        if(GuildChannelUserContextMenu) inject(this.entityID, GuildChannelUserContextMenu, "default", (args, ret) => {
             const [props] = args;
             if(!ret || !ret.props || !ret.props.children || !ret.props.children.props || !Array.isArray(ret.props.children.props.children)) return ret;
             else ret.props.children.props.children.push(
@@ -61,6 +60,6 @@ module.exports = class AvatarViewer extends Plugin {
     }
 
     pluginWillUnload() {
-        uninject(this.id);
+        uninject(this.entityID);
     }
 }
