@@ -6,6 +6,7 @@ const {
         getModule,
         getModuleByDisplayName,
         getAllModules,
+        modal,
         React
     },
     injector: {
@@ -15,7 +16,6 @@ const {
 } = require("powercord");
 const ImageModal = getModuleByDisplayName("ImageModal", false);
 const { MenuItem, MenuGroup } = getModule(m => m.MenuRadioItem && !m.default, false);
-const ModalStack = getModule(["push", "popAll"], false);
 const AllUserContextMenus = getAllModules(m=>
     m.default && 
     m.default.displayName && 
@@ -56,15 +56,17 @@ module.exports = class AvatarViewer extends Plugin {
             e.default.displayName = displayName;
         })
     }
-    openModal(url) {
-        ModalStack.push(e => React.createElement(ImageModal, {
+    async openModal(url) {
+        const MaskedLink = await getModuleByDisplayName("MaskedLink");
+        modal.push(e => React.createElement(ImageModal, {
             ...e,
             src: url,
             placeholder: url,
             original: url,
             width: 2048,
             height: 2048,
-            onClickUntrusted: e => e.openHref()
+            onClickUntrusted: e => e.openHref(),
+            renderLinkComponent: props => React.createElement(MaskedLink, props)
         }));
     }
 
