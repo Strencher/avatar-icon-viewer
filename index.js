@@ -24,6 +24,7 @@ const AllUserContextMenus = getAllModules(m=>
 const copy = e => getModule(["copy"], false).copy(e);
 // Below Copied from ZLibrary
 const findInTree = (e,t) => t.split(".").reduce((e,p)=>e&&e[p],e);
+const SelectedGuildsStore = getModule(["getGuildId", "getLastSelectedGuildId"], false);
 module.exports = class AvatarViewer extends Plugin {
     startPlugin() {
         AllUserContextMenus.forEach(e=>{
@@ -37,7 +38,7 @@ module.exports = class AvatarViewer extends Plugin {
                             React.createElement(MenuItem, {
                                 id: "avatar-viewer-view",
                                 action: () => {
-                                    this.openModal(user.getAvatarURL(getModule(['hasAnimatedAvatar'], false).hasAnimatedAvatar(user) ? "gif" : "webp").split("?")[0]+"?size=2048")
+                                    this.openModal(user.getAvatarURL(SelectedGuildsStore.getGuildId(), "gif").split("?")[0]+"?size=2048")
                                 },
                                 label: "View Avatar"
                             }),
